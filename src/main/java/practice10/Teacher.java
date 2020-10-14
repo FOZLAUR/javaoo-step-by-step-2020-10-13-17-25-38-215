@@ -1,27 +1,19 @@
 package practice10;
 
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class Teacher extends Person{
-    private Klass klass;
     private LinkedList<Klass> klassList;
 
     public Teacher(int id, String name, int age) {
         super(id, name, age);
     }
 
-//    public Teacher(int id, String name, int age, Klass klass) {
-//        super(id, name, age);
-//        this.klass = klass;
-//    }
-
     public Teacher(int id, String name, int age, LinkedList<Klass> klassList) {
         super(id, name, age);
         this.klassList = klassList;
     }
-
-    public Klass getKlass() { return klass; }
 
     @Override
     public String introduce() {
@@ -45,23 +37,11 @@ public class Teacher extends Person{
     }
 
     public String returnClassString(){
-        String str = "";
-        for(int i=0; i<klassList.size(); i++){
-            str+=klassList.get(i).getNumber();
-            if(i!=klassList.size()-1){
-                str+=", ";
-            }
-        }
-        return str;
+        return klassList.stream().map(klass -> String.valueOf(klass.getNumber())).collect( Collectors.joining( ", " ) );
     }
 
 
     public boolean isTeaching(Student student) {
-        for(Klass klass : klassList){
-            if(klass.isIn(student)){
-                return true;
-            }
-        }
-        return false;
+        return klassList.stream().anyMatch(klass -> klass.isIn(student));
     }
 }
